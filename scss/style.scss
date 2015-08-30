@@ -7,11 +7,19 @@ Dark Admin :)
 
 	// Utilities
 	"utilities/colors",
+	"utilities/functions",
 	"utilities/reset",
 	"utilities/accessibility",
 	"utilities/clearfix",
 
 	// Components
 
-	"components/test"
+	"components/common",
+	"components/forms",
+	"components/nav-menus",
+	"components/main",
+	"components/login",
+	"components/dashboard",
+	"components/adminmenu",
+	"components/edit"
 ;
