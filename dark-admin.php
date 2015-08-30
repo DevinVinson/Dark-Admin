@@ -31,6 +31,7 @@ class DarkAdmin {
 		add_filter( 'admin_body_class',            array( $this, 'add_body_class_backend' ) );
 
 		add_action( 'wp_head',                     array( $this, 'override_toolbar_margin' ), 11 );
+		add_action( 'wp_before_admin_bar_render',  array( $this, 'admin_bar_my_account_item'), 999 );
 	}
 
 	private function replace_css( $handle, $file, $suffix = null ) {
@@ -76,6 +77,40 @@ class DarkAdmin {
 		}
 		$this->replace_css( 'admin-bar', 'admin-bar.css', '' );
 	}
+
+	/**
+	 * Add the "My Account" item.
+	 *
+	 * @since 3.3.0
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar
+	 */
+	public function admin_bar_my_account_item( $wp_admin_bar ) {
+
+		global $wp_admin_bar;
+
+		$user_id      = get_current_user_id();
+		$current_user = wp_get_current_user();
+		$profile_url  = get_edit_profile_url( $user_id );
+
+		if ( ! $user_id )
+			return;
+
+		$avatar = get_avatar( $user_id, 26 );
+		//$howdy  = sprintf( __('Howdy, %1$s'), $current_user->display_name );
+		$class  = empty( $avatar ) ? '' : 'with-avatar';
+
+		$wp_admin_bar->add_menu( array(
+			'id'        => 'my-account',
+			'parent'    => 'top-secondary',
+			'title'     => $avatar, //removed $howdy since we aren't using it
+			'href'      => $profile_url,
+			'meta'      => array(
+				'class'     => $class,
+			),
+		) );
+	}
+
 
 	public function mce_init( $mce_init ) {
 		// make sure we don't override other custom `content_css` files
